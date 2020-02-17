@@ -1,0 +1,163 @@
+[%%org
+  {|
+#+TITLE: Higher kinded types
+
+OCaml natively supports parameterized type constructors, such as ~option~. The parameters
+of a type constructor may only be types, not arbitrary type constructors.
+
+The following is not legal syntax:
+
+#+begin_src ocaml
+type 'a person =
+  { name : string 'a
+  ; age  : int    'a
+  }
+#+end_src
+
+It is not possible to define such a type where ~'a~ can be replaced with something
+like ~option~ or ~ref~, because you can't apply ~'a~ to other types like ~string~ or
+~int~. In other words, although ~int option~ is a valid type expression, ~int 'a~ is not.
+
+The ~Higher_kinded~ library makes something similar possible. The above example would be
+defined like this:
+|}]
+
+type 'a person =
+  { name : (string, 'a) Higher_kinded.t
+  ; age : (int, 'a) Higher_kinded.t
+  }
+
+[%%org
+  {|
+Note that the ordering here is ~(string, 'a)~, not ~('a, string)~, similar to how you
+write ~string option~, not ~option string~.
+
+A signature defining a type constructor can include one of the ~Higher_kinded.S~
+signatures, and its implementation should use one of the ~Higher_kinded.Make~ functors.
+For example, ~Option~ could look something like this:
+|}]
+
+;;
+#verbose true
+
+module Option : sig
+  type 'a t = 'a option
+
+  include Higher_kinded.S with type 'a t := 'a t
+end = struct
+  type 'a t = 'a option
+
+  include Higher_kinded.Make (Base.Option)
+end
+
+[%%expect
+  {|
+module Option :
+  sig
+    type 'a t = 'a option
+    type witness1
+    type 'a witness = ('a, witness1) Higher_kinded.t
+    val inject : 'a t -> 'a witness
+    val project : 'a witness -> 'a t
+  end
+|}]
+
+[%%org
+  {|
+Now it is possible to define values of type ~int Option.witness~, which as you can see in
+the signature above is the same as the type ~(int, Option.witness) Higher_kinded.t~:
+|}]
+
+let a = Option.inject (None : int option)
+
+[%%expect {|
+val a : int Option.witness = <abstr>
+|}]
+
+let b = Option.inject (Some 42)
+
+[%%expect {|
+val b : int Option.witness = <abstr>
+|}]
+
+[%%org {|
+Here is how to observe them:
+|}]
+
+let _ = (Option.project a : int option)
+
+[%%expect {|
+- : int option = None
+|}]
+
+let _ = (Option.project b : int option)
+
+[%%expect {|
+- : int option = Some 42
+|}]
+
+[%%org
+  {|
+Now that ~Option~ can be used this way, we can express the ~person~ example from earlier:
+|}]
+
+let alice = { name = Option.inject (Some "alice doe"); age = Option.inject None }
+
+[%%expect {|
+val alice : Option.witness1 person = {name = <abstr>; age = <abstr>}
+|}]
+
+[%%org {|
+If we did the same thing with refs:
+|}]
+
+module Ref : sig
+  type 'a t = 'a ref
+
+  include Higher_kinded.S with type 'a t := 'a t
+end = struct
+  type 'a t = 'a ref
+
+  include Higher_kinded.Make (Base.Ref)
+end
+
+[%%expect
+  {|
+module Ref :
+  sig
+    type 'a t = 'a ref
+    type witness1
+    type 'a witness = ('a, witness1) Higher_kinded.t
+    val inject : 'a t -> 'a witness
+    val project : 'a witness -> 'a t
+  end
+|}]
+
+[%%org {|
+we could write:
+|}]
+
+let secret_agent : Ref.witness1 person =
+  { name = Ref.inject (ref "alice"); age = Ref.inject (ref 55) }
+;;
+
+[%%expect {|
+val secret_agent : Ref.witness1 person = {name = <abstr>; age = <abstr>}
+|}]
+
+[%%org {|
+Here's how we could modify the references:
+|}]
+
+let () =
+  Ref.project secret_agent.name := "Austin Powers";
+  Ref.project secret_agent.age := 35
+;;
+
+[%%org
+  {|
+The ~inject~ and ~project~ functions have no runtime cost; they only change the type.
+
+This library is based on Jeremy Yallop and Leo White's "Lightweight higher-kinded
+polymorphism".
+|}]
