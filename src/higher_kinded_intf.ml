@@ -126,6 +126,9 @@ module type S8 = sig
 end
 
 module type Higher_kinded = sig
+  (** This library allows you to use higher-kinded types in OCaml. See the README for a
+      short tutorial on what that means and how to use it. *)
+
 
   (** {2 Types} *)
 
