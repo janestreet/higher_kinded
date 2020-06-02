@@ -1,1 +1,2 @@
-(library (name higher_kinded) (libraries base) (preprocess (pps ppx_jane)))
+(library (name higher_kinded) (public_name higher_kinded)
+ (libraries base) (preprocess (pps ppx_jane)))
