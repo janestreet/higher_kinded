@@ -11,7 +11,9 @@ build: [
 ]
 depends: [
   "ocaml" {>= "4.09.0"}
-  "dune" {>= "2.0.0"}
+  "base"
+  "ppx_jane"
+  "dune"     {>= "2.0.0"}
 ]
 synopsis: "A library with an encoding of higher kinded types in OCaml"
 description: "
