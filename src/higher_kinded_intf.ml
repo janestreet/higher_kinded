@@ -208,8 +208,7 @@ module type Higher_kinded = sig
       type (_, _, _, _, _, _, _, _) t
     end) :
     S8
-    with type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t :=
-      ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t
+    with type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t
 
   (** {2 Implementations} *)
 
@@ -235,6 +234,5 @@ module type Higher_kinded = sig
 
   (** [t] itself has two type parameters, so we might as well implement [S2] right here.
   *)
-  include
-    S2 with type ('a, 'witness) t := ('a, 'witness) t
+  include S2 with type ('a, 'witness) t := ('a, 'witness) t
 end

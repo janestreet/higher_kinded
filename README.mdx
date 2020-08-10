@@ -1,0 +1,119 @@
+"Higher kinded types"
+=====================
+
+OCaml natively supports parameterized type constructors, such as
+`option`. The parameters of a type constructor may only be types, not
+arbitrary type constructors.
+
+The following is not legal syntax:
+
+```
+type 'a person =
+  { name : string 'a
+  ; age  : int 'a
+  }
+```
+
+It is not possible to define such a type where `'a` can be replaced
+with something like `option` or `ref`, because you can't apply `'a` to
+other types like `string` or `int`. In other words, although `int
+option` is a valid type expression, `int 'a` is not.
+
+The `Higher_kinded` library makes something similar possible. The
+above example would be defined like this:
+
+```ocaml
+type 'a person =
+  { name : (string, 'a) Higher_kinded.t
+  ; age : (int, 'a) Higher_kinded.t
+  }
+```
+
+Note that the ordering here is `(string, 'a)`, not `('a, string)`,
+similar to how you write `string option`, not `option string`.
+
+A signature defining a type constructor can include one of the
+`Higher_kinded.S` signatures, and its implementation should use one of
+the `Higher_kinded.Make` functors. For example, `Option` could look
+something like this:
+
+```ocaml
+# module Option : sig
+    type 'a t = 'a option
+
+    include Higher_kinded.S with type 'a t := 'a t
+  end = struct
+    type 'a t = 'a option
+
+    include Higher_kinded.Make (Base.Option)
+  end
+module Option :
+  sig
+    type 'a t = 'a option
+    type witness1
+    type 'a witness = ('a, witness1) Higher_kinded.t
+    val inject : 'a t -> 'a witness
+    val project : 'a witness -> 'a t
+  end
+```
+
+Now it is possible to define values of type `int Option.witness`,
+which as you can see in the signature above is the same as the type
+`(int, Option.witness) Higher_kinded.t`:
+
+```ocaml
+# let a = Option.inject (None : int option)
+val a : int Option.witness = <abstr>
+# let b = Option.inject (Some 42)
+val b : int Option.witness = <abstr>
+```
+
+Here is how to observe them:
+
+```ocaml
+# Option.project b
+- : int option = Some 42
+```
+
+Now that `Option` can be used this way, we can express the `person`
+example from earlier:
+
+```ocaml
+# let alice = { name = Option.inject (Some "alice doe"); age = Option.inject None }
+val alice : Option.witness1 person = {name = <abstr>; age = <abstr>}
+```
+
+If we did the same thing with refs:
+
+```ocaml
+module Ref : sig
+  type 'a t = 'a ref
+
+  include Higher_kinded.S with type 'a t := 'a t
+end = struct
+  type 'a t = 'a ref
+
+  include Higher_kinded.Make (Base.Ref)
+end
+```
+
+we could write:
+
+```ocaml
+# let secret_agent : Ref.witness1 person =
+    { name = Ref.inject (ref "alice"); age = Ref.inject (ref 55) }
+val secret_agent : Ref.witness1 person = {name = <abstr>; age = <abstr>}
+```
+
+Here's how we could modify the references:
+
+```ocaml
+Ref.project secret_agent.name := "Austin Powers";
+Ref.project secret_agent.age := 35
+```
+
+The `inject` and `project` functions have no runtime cost; they only
+change the type.
+
+This library is based on Jeremy Yallop and Leo White's "Lightweight
+higher-kinded polymorphism".

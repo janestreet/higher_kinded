@@ -73,10 +73,7 @@ module Make5 (X : sig
   type ('a, 'x, 'y, 'z) witness1 = ('a, ('x, 'y, 'z) witness2) t
   type ('a, 'w, 'x, 'y, 'z) witness = ('a, ('w, 'x, 'y, 'z) witness1) t
 
-  external inject
-    :  ('a, 'w, 'x, 'y, 'z) X.t
-    -> ('a, 'w, 'x, 'y, 'z) witness
-    = "%identity"
+  external inject : ('a, 'w, 'x, 'y, 'z) X.t -> ('a, 'w, 'x, 'y, 'z) witness = "%identity"
 
   external project
     :  ('a, 'w, 'x, 'y, 'z) witness
