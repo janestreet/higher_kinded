@@ -1,128 +1,142 @@
 open Base
 
-module type S = sig
-  type (_, _) higher_kinded
-  type 'a t
-  type witness1
-  type 'a witness = ('a, witness1) higher_kinded
+module Higher_kinded_module_types (Higher_kinded : T2) = struct
+  (** These are the signatures implemented by the [Make] family of functors. *)
 
-  val inject : 'a t -> 'a witness
-  val project : 'a witness -> 'a t
-end
+  module type S = sig
+    type 'a t
+    type witness1
+    type 'a witness = ('a, witness1) Higher_kinded.t
 
-module type S2 = sig
-  type (_, _) higher_kinded
-  type ('a, 'z) t
-  type witness2
-  type 'z witness1 = ('z, witness2) higher_kinded
-  type ('a, 'z) witness = ('a, 'z witness1) higher_kinded
+    val inject : 'a t -> 'a witness
+    val project : 'a witness -> 'a t
+  end
 
-  val inject : ('a, 'z) t -> ('a, 'z) witness
-  val project : ('a, 'z) witness -> ('a, 'z) t
-end
+  module type S2 = sig
+    type ('a, 'z) t
+    type witness2
+    type 'z witness1 = ('z, witness2) Higher_kinded.t
+    type ('a, 'z) witness = ('a, 'z witness1) Higher_kinded.t
 
-module type S3 = sig
-  type (_, _) higher_kinded
-  type ('a, 'y, 'z) t
-  type witness3
-  type 'z witness2 = ('z, witness3) higher_kinded
-  type ('y, 'z) witness1 = ('y, 'z witness2) higher_kinded
-  type ('a, 'y, 'z) witness = ('a, ('y, 'z) witness1) higher_kinded
+    val inject : ('a, 'z) t -> ('a, 'z) witness
+    val project : ('a, 'z) witness -> ('a, 'z) t
+  end
 
-  val inject : ('a, 'y, 'z) t -> ('a, 'y, 'z) witness
-  val project : ('a, 'y, 'z) witness -> ('a, 'y, 'z) t
-end
+  module type S3 = sig
+    type ('a, 'y, 'z) t
+    type witness3
+    type 'z witness2 = ('z, witness3) Higher_kinded.t
+    type ('y, 'z) witness1 = ('y, 'z witness2) Higher_kinded.t
+    type ('a, 'y, 'z) witness = ('a, ('y, 'z) witness1) Higher_kinded.t
 
-module type S4 = sig
-  type (_, _) higher_kinded
-  type ('a, 'x, 'y, 'z) t
-  type witness4
-  type 'z witness3 = ('z, witness4) higher_kinded
-  type ('y, 'z) witness2 = ('y, 'z witness3) higher_kinded
-  type ('x, 'y, 'z) witness1 = ('x, ('y, 'z) witness2) higher_kinded
-  type ('a, 'x, 'y, 'z) witness = ('a, ('x, 'y, 'z) witness1) higher_kinded
+    val inject : ('a, 'y, 'z) t -> ('a, 'y, 'z) witness
+    val project : ('a, 'y, 'z) witness -> ('a, 'y, 'z) t
+  end
 
-  val inject : ('a, 'x, 'y, 'z) t -> ('a, 'x, 'y, 'z) witness
-  val project : ('a, 'x, 'y, 'z) witness -> ('a, 'x, 'y, 'z) t
-end
+  module type S4 = sig
+    type ('a, 'x, 'y, 'z) t
+    type witness4
+    type 'z witness3 = ('z, witness4) Higher_kinded.t
+    type ('y, 'z) witness2 = ('y, 'z witness3) Higher_kinded.t
+    type ('x, 'y, 'z) witness1 = ('x, ('y, 'z) witness2) Higher_kinded.t
+    type ('a, 'x, 'y, 'z) witness = ('a, ('x, 'y, 'z) witness1) Higher_kinded.t
 
-module type S5 = sig
-  type (_, _) higher_kinded
-  type ('a, 'w, 'x, 'y, 'z) t
-  type witness5
-  type 'z witness4 = ('z, witness5) higher_kinded
-  type ('y, 'z) witness3 = ('y, 'z witness4) higher_kinded
-  type ('x, 'y, 'z) witness2 = ('x, ('y, 'z) witness3) higher_kinded
-  type ('a, 'x, 'y, 'z) witness1 = ('a, ('x, 'y, 'z) witness2) higher_kinded
-  type ('a, 'w, 'x, 'y, 'z) witness = ('a, ('w, 'x, 'y, 'z) witness1) higher_kinded
+    val inject : ('a, 'x, 'y, 'z) t -> ('a, 'x, 'y, 'z) witness
+    val project : ('a, 'x, 'y, 'z) witness -> ('a, 'x, 'y, 'z) t
+  end
 
-  val inject : ('a, 'w, 'x, 'y, 'z) t -> ('a, 'w, 'x, 'y, 'z) witness
-  val project : ('a, 'w, 'x, 'y, 'z) witness -> ('a, 'w, 'x, 'y, 'z) t
-end
+  module type S5 = sig
+    type ('a, 'w, 'x, 'y, 'z) t
+    type witness5
+    type 'z witness4 = ('z, witness5) Higher_kinded.t
+    type ('y, 'z) witness3 = ('y, 'z witness4) Higher_kinded.t
+    type ('x, 'y, 'z) witness2 = ('x, ('y, 'z) witness3) Higher_kinded.t
+    type ('a, 'x, 'y, 'z) witness1 = ('a, ('x, 'y, 'z) witness2) Higher_kinded.t
+    type ('a, 'w, 'x, 'y, 'z) witness = ('a, ('w, 'x, 'y, 'z) witness1) Higher_kinded.t
 
-module type S6 = sig
-  type (_, _) higher_kinded
-  type ('a, 'v, 'w, 'x, 'y, 'z) t
-  type witness6
-  type 'z witness5 = ('z, witness6) higher_kinded
-  type ('y, 'z) witness4 = ('y, 'z witness5) higher_kinded
-  type ('x, 'y, 'z) witness3 = ('x, ('y, 'z) witness4) higher_kinded
-  type ('a, 'x, 'y, 'z) witness2 = ('a, ('x, 'y, 'z) witness3) higher_kinded
-  type ('a, 'w, 'x, 'y, 'z) witness1 = ('a, ('w, 'x, 'y, 'z) witness2) higher_kinded
+    val inject : ('a, 'w, 'x, 'y, 'z) t -> ('a, 'w, 'x, 'y, 'z) witness
+    val project : ('a, 'w, 'x, 'y, 'z) witness -> ('a, 'w, 'x, 'y, 'z) t
+  end
 
-  type ('a, 'v, 'w, 'x, 'y, 'z) witness =
-    ('a, ('v, 'w, 'x, 'y, 'z) witness1) higher_kinded
+  module type S6 = sig
+    type ('a, 'v, 'w, 'x, 'y, 'z) t
+    type witness6
+    type 'z witness5 = ('z, witness6) Higher_kinded.t
+    type ('y, 'z) witness4 = ('y, 'z witness5) Higher_kinded.t
+    type ('x, 'y, 'z) witness3 = ('x, ('y, 'z) witness4) Higher_kinded.t
+    type ('a, 'x, 'y, 'z) witness2 = ('a, ('x, 'y, 'z) witness3) Higher_kinded.t
+    type ('a, 'w, 'x, 'y, 'z) witness1 = ('a, ('w, 'x, 'y, 'z) witness2) Higher_kinded.t
 
-  val inject : ('a, 'v, 'w, 'x, 'y, 'z) t -> ('a, 'v, 'w, 'x, 'y, 'z) witness
-  val project : ('a, 'v, 'w, 'x, 'y, 'z) witness -> ('a, 'v, 'w, 'x, 'y, 'z) t
-end
+    type ('a, 'v, 'w, 'x, 'y, 'z) witness =
+      ('a, ('v, 'w, 'x, 'y, 'z) witness1) Higher_kinded.t
 
-module type S7 = sig
-  type (_, _) higher_kinded
-  type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
-  type witness7
-  type 'z witness6 = ('z, witness7) higher_kinded
-  type ('y, 'z) witness5 = ('y, 'z witness6) higher_kinded
-  type ('x, 'y, 'z) witness4 = ('x, ('y, 'z) witness5) higher_kinded
-  type ('a, 'x, 'y, 'z) witness3 = ('a, ('x, 'y, 'z) witness4) higher_kinded
-  type ('a, 'w, 'x, 'y, 'z) witness2 = ('a, ('w, 'x, 'y, 'z) witness3) higher_kinded
+    val inject : ('a, 'v, 'w, 'x, 'y, 'z) t -> ('a, 'v, 'w, 'x, 'y, 'z) witness
+    val project : ('a, 'v, 'w, 'x, 'y, 'z) witness -> ('a, 'v, 'w, 'x, 'y, 'z) t
+  end
 
-  type ('a, 'v, 'w, 'x, 'y, 'z) witness1 =
-    ('a, ('v, 'w, 'x, 'y, 'z) witness2) higher_kinded
+  module type S7 = sig
+    type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
+    type witness7
+    type 'z witness6 = ('z, witness7) Higher_kinded.t
+    type ('y, 'z) witness5 = ('y, 'z witness6) Higher_kinded.t
+    type ('x, 'y, 'z) witness4 = ('x, ('y, 'z) witness5) Higher_kinded.t
+    type ('a, 'x, 'y, 'z) witness3 = ('a, ('x, 'y, 'z) witness4) Higher_kinded.t
+    type ('a, 'w, 'x, 'y, 'z) witness2 = ('a, ('w, 'x, 'y, 'z) witness3) Higher_kinded.t
 
-  type ('a, 'u, 'v, 'w, 'x, 'y, 'z) witness =
-    ('a, ('u, 'v, 'w, 'x, 'y, 'z) witness1) higher_kinded
+    type ('a, 'v, 'w, 'x, 'y, 'z) witness1 =
+      ('a, ('v, 'w, 'x, 'y, 'z) witness2) Higher_kinded.t
 
-  val inject : ('a, 'u, 'v, 'w, 'x, 'y, 'z) t -> ('a, 'u, 'v, 'w, 'x, 'y, 'z) witness
-  val project : ('a, 'u, 'v, 'w, 'x, 'y, 'z) witness -> ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
-end
+    type ('a, 'u, 'v, 'w, 'x, 'y, 'z) witness =
+      ('a, ('u, 'v, 'w, 'x, 'y, 'z) witness1) Higher_kinded.t
 
-module type S8 = sig
-  type (_, _) higher_kinded
-  type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
-  type witness8
-  type 'z witness7 = ('z, witness8) higher_kinded
-  type ('y, 'z) witness6 = ('y, 'z witness7) higher_kinded
-  type ('x, 'y, 'z) witness5 = ('x, ('y, 'z) witness6) higher_kinded
-  type ('a, 'x, 'y, 'z) witness4 = ('a, ('x, 'y, 'z) witness5) higher_kinded
-  type ('a, 'w, 'x, 'y, 'z) witness3 = ('a, ('w, 'x, 'y, 'z) witness4) higher_kinded
+    val inject : ('a, 'u, 'v, 'w, 'x, 'y, 'z) t -> ('a, 'u, 'v, 'w, 'x, 'y, 'z) witness
+    val project : ('a, 'u, 'v, 'w, 'x, 'y, 'z) witness -> ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
+  end
 
-  type ('a, 'v, 'w, 'x, 'y, 'z) witness2 =
-    ('a, ('v, 'w, 'x, 'y, 'z) witness3) higher_kinded
+  module type S8 = sig
+    type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
+    type witness8
+    type 'z witness7 = ('z, witness8) Higher_kinded.t
+    type ('y, 'z) witness6 = ('y, 'z witness7) Higher_kinded.t
+    type ('x, 'y, 'z) witness5 = ('x, ('y, 'z) witness6) Higher_kinded.t
+    type ('a, 'x, 'y, 'z) witness4 = ('a, ('x, 'y, 'z) witness5) Higher_kinded.t
+    type ('a, 'w, 'x, 'y, 'z) witness3 = ('a, ('w, 'x, 'y, 'z) witness4) Higher_kinded.t
 
-  type ('a, 'u, 'v, 'w, 'x, 'y, 'z) witness1 =
-    ('a, ('u, 'v, 'w, 'x, 'y, 'z) witness2) higher_kinded
+    type ('a, 'v, 'w, 'x, 'y, 'z) witness2 =
+      ('a, ('v, 'w, 'x, 'y, 'z) witness3) Higher_kinded.t
 
-  type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) witness =
-    ('a, ('t, 'u, 'v, 'w, 'x, 'y, 'z) witness1) higher_kinded
+    type ('a, 'u, 'v, 'w, 'x, 'y, 'z) witness1 =
+      ('a, ('u, 'v, 'w, 'x, 'y, 'z) witness2) Higher_kinded.t
 
-  val inject
-    :  ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
-    -> ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) witness
+    type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) witness =
+      ('a, ('t, 'u, 'v, 'w, 'x, 'y, 'z) witness1) Higher_kinded.t
 
-  val project
-    :  ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) witness
-    -> ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
+    val inject
+      :  ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
+      -> ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) witness
+
+    val project
+      :  ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) witness
+      -> ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
+  end
+
+  (** These are the signatures implemented by the [Make_monad] and
+      [Make_monad_using_witness] families of functors. *)
+
+  module type Monad = sig
+    include S
+    include Monad.S with type 'a t := 'a witness
+  end
+
+  module type Monad2 = sig
+    include S2
+    include Monad.S2 with type ('a, 'b) t := ('a, 'b) witness
+  end
+
+  module type Monad3 = sig
+    include S3
+    include Monad.S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) witness
+  end
 end
 
 module type Higher_kinded = sig
@@ -168,16 +182,9 @@ module type Higher_kinded = sig
 
   (** {2 Signatures} *)
 
-  (** These are the signatures implemented by the [Make] family of functors. *)
-
-  module type S = S with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-  module type S2 = S2 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-  module type S3 = S3 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-  module type S4 = S4 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-  module type S5 = S5 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-  module type S6 = S6 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-  module type S7 = S7 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-  module type S8 = S8 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
+  include module type of Higher_kinded_module_types (struct
+      type nonrec ('a, 'witness) t = ('a, 'witness) t
+    end)
 
   (** {2 Functors} *)
 
@@ -210,6 +217,23 @@ module type Higher_kinded = sig
     S8
     with type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t
 
+  module Make_monad (M : Monad.S) : Monad with type 'a t := 'a M.t
+  module Make_monad2 (M : Monad.S2) : Monad2 with type ('a, 'b) t := ('a, 'b) M.t
+  module Make_monad3 (M : Monad.S3) : Monad3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t
+
+  module Make_monad_using_witness (M : Monad.S) (X : S with type 'a t := 'a M.t) :
+    Monad with type 'a t := 'a M.t with type witness1 := X.witness1
+
+  module Make_monad_using_witness2
+      (M : Monad.S2)
+      (X : S2 with type ('a, 'b) t := ('a, 'b) M.t) :
+    Monad2 with type ('a, 'b) t := ('a, 'b) M.t with type witness2 := X.witness2
+
+  module Make_monad_using_witness3
+      (M : Monad.S3)
+      (X : S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t) :
+    Monad3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t with type witness3 := X.witness3
+
   (** {2 Implementations} *)
 
   (** [Base], [Core], and [Async] don't depend on [Higher_kinded], so we put these
@@ -236,3 +260,4 @@ module type Higher_kinded = sig
   *)
   include S2 with type ('a, 'witness) t := ('a, 'witness) t
 end
+

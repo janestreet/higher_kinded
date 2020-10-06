@@ -14,14 +14,9 @@ type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'witness) t7 =
 type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'witness) t8 =
   ('a, 'b, 'c, 'd, 'e, 'f, 'g, ('h, 'witness) t) t7
 
-module type S = S with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-module type S2 = S2 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-module type S3 = S3 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-module type S4 = S4 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-module type S5 = S5 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-module type S6 = S6 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-module type S7 = S7 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
-module type S8 = S8 with type ('a, 'witness) higher_kinded := ('a, 'witness) t
+include Higher_kinded_module_types (struct
+    type nonrec ('a, 'witness) t = ('a, 'witness) t
+  end)
 
 module Make (X : T1) : S with type 'a t := 'a X.t = struct
   type witness1
@@ -154,6 +149,109 @@ struct
     -> ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t
     = "%identity"
 end
+
+
+module Monad_of_monad3
+    (M : Monad.S3) (T : sig
+                      type ('a, 'b, 'c) t
+
+                      val to_monad : ('a, 'b, 'c) t -> ('a, 'b, 'c) M.t
+                      val of_monad : ('a, 'b, 'c) M.t -> ('a, 'b, 'c) t
+                    end) =
+  Monad.Make3 (struct
+    type ('a, 'b, 'c) t = ('a, 'b, 'c) T.t
+
+    let return a = T.of_monad (M.return a)
+    let bind t ~f = M.bind (T.to_monad t) ~f:(fun a -> T.to_monad (f a)) |> T.of_monad
+    let map = `Custom (fun t ~f -> M.map (T.to_monad t) ~f |> T.of_monad)
+  end)
+
+module Monad_of_monad2
+    (M : Monad.S2) (T : sig
+                      type ('a, 'b) t
+
+                      val to_monad : ('a, 'b) t -> ('a, 'b) M.t
+                      val of_monad : ('a, 'b) M.t -> ('a, 'b) t
+                    end) =
+  Monad_of_monad3
+    (struct
+      type ('a, 'b, 'c) t = ('a, 'b) M.t
+
+      include (M : module type of M with type ('a, 'b) t := ('a, 'b) M.t)
+    end)
+    (struct
+      type ('a, 'b, 'c) t = ('a, 'b) T.t
+
+      include (T : module type of T with type ('a, 'b) t := ('a, 'b) T.t)
+    end)
+
+module Monad_of_monad
+    (M : Monad.S) (T : sig
+                     type 'a t
+
+                     val to_monad : 'a t -> 'a M.t
+                     val of_monad : 'a M.t -> 'a t
+                   end) =
+  Monad_of_monad2
+    (struct
+      type ('a, 'b) t = 'a M.t
+
+      include (M : module type of M with type 'a t := 'a M.t)
+    end)
+    (struct
+      type ('a, 'b) t = 'a T.t
+
+      include (T : module type of T with type 'a t := 'a T.t)
+    end)
+
+module Make_monad_using_witness (M : Monad.S) (X : S with type 'a t := 'a M.t) = struct
+  include X
+
+  include Monad_of_monad
+      (M)
+      (struct
+        type 'a t = 'a witness
+
+        let to_monad = project
+        let of_monad = inject
+      end)
+end
+
+module Make_monad_using_witness2
+    (M : Monad.S2)
+    (X : S2 with type ('a, 'b) t := ('a, 'b) M.t) =
+struct
+  include X
+
+  include Monad_of_monad2
+      (M)
+      (struct
+        type ('a, 'b) t = ('a, 'b) witness
+
+        let to_monad = project
+        let of_monad = inject
+      end)
+end
+
+module Make_monad_using_witness3
+    (M : Monad.S3)
+    (X : S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t) =
+struct
+  include X
+
+  include Monad_of_monad3
+      (M)
+      (struct
+        type nonrec ('a, 'b, 'c) t = ('a, 'b, 'c) witness
+
+        let to_monad = project
+        let of_monad = inject
+      end)
+end
+
+module Make_monad (M : Monad.S) = Make_monad_using_witness (M) (Make (M))
+module Make_monad2 (M : Monad.S2) = Make_monad_using_witness2 (M) (Make2 (M))
+module Make_monad3 (M : Monad.S3) = Make_monad_using_witness3 (M) (Make3 (M))
 
 include Make2 (struct
     type nonrec ('a, 'witness) t = ('a, 'witness) t
