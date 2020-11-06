@@ -24,13 +24,16 @@ above example would be defined like this:
 
 ```ocaml
 type 'a person =
-  { name : (string, 'a) Higher_kinded.t
-  ; age : (int, 'a) Higher_kinded.t
+  { name : (string -> 'a) Higher_kinded.t
+  ; age : (int -> 'a) Higher_kinded.t
   }
 ```
 
-Note that the ordering here is `(string, 'a)`, not `('a, string)`,
-similar to how you write `string option`, not `option string`.
+The fundamental concept of `Higher_kinded` is that a value of type `(a
+-> ... -> z -> C.higher_kinded) Higher_kinded.t` is equivalent to a
+value of type `(a, ..., z) C.t`. The only reason it is rendered as a
+function is that `->` is the only right associative type operator,
+which is useful for reasons that will be explained later.
 
 A signature defining a type constructor can include one of the
 `Higher_kinded.S` signatures, and its implementation should use one of
@@ -50,22 +53,20 @@ something like this:
 module Option :
   sig
     type 'a t = 'a option
-    type witness1
-    type 'a witness = ('a, witness1) Higher_kinded.t
-    val inject : 'a t -> 'a witness
-    val project : 'a witness -> 'a t
+    type higher_kinded
+    val inject : 'a t -> ('a -> higher_kinded) Higher_kinded.t
+    val project : ('a -> higher_kinded) Higher_kinded.t -> 'a t
   end
 ```
 
-Now it is possible to define values of type `int Option.witness`,
-which as you can see in the signature above is the same as the type
-`(int, Option.witness) Higher_kinded.t`:
+Now it is possible to define values of type `(int ->
+Option.higher_kinded) Higher_kinded.t`:
 
 ```ocaml
 # let a = Option.inject (None : int option)
-val a : int Option.witness = <abstr>
+val a : (int -> Option.higher_kinded) Higher_kinded.t = <abstr>
 # let b = Option.inject (Some 42)
-val b : int Option.witness = <abstr>
+val b : (int -> Option.higher_kinded) Higher_kinded.t = <abstr>
 ```
 
 Here is how to observe them:
@@ -80,7 +81,7 @@ example from earlier:
 
 ```ocaml
 # let alice = { name = Option.inject (Some "alice doe"); age = Option.inject None }
-val alice : Option.witness1 person = {name = <abstr>; age = <abstr>}
+val alice : Option.higher_kinded person = {name = <abstr>; age = <abstr>}
 ```
 
 If we did the same thing with refs:
@@ -100,9 +101,9 @@ end
 we could write:
 
 ```ocaml
-# let secret_agent : Ref.witness1 person =
+# let secret_agent =
     { name = Ref.inject (ref "alice"); age = Ref.inject (ref 55) }
-val secret_agent : Ref.witness1 person = {name = <abstr>; age = <abstr>}
+val secret_agent : Ref.higher_kinded person = {name = <abstr>; age = <abstr>}
 ```
 
 Here's how we could modify the references:
@@ -115,5 +116,43 @@ Ref.project secret_agent.age := 35
 The `inject` and `project` functions have no runtime cost; they only
 change the type.
 
-This library is based on Jeremy Yallop and Leo White's "Lightweight
-higher-kinded polymorphism".
+You can also use `Higher_kinded` for types that have multiple type
+parameters. Here is an example using `Result`:
+
+```ocaml
+# module Result : sig
+    type ('a, 'e) t = ('a, 'e) result
+
+    include Higher_kinded.S2 with type ('a, 'e) t := ('a, 'e) t
+  end = struct
+    type ('a, 'e) t = ('a, 'e) result
+
+    include Higher_kinded.Make2 (Base.Result)
+  end
+module Result :
+  sig
+    type ('a, 'e) t = ('a, 'e) result
+    type higher_kinded
+    val inject : ('a, 'z) t -> ('a -> 'z -> higher_kinded) Higher_kinded.t
+    val project : ('a -> 'z -> higher_kinded) Higher_kinded.t -> ('a, 'z) t
+  end
+```
+
+You can even use multi-parameter higher kinded witnesses in positions
+expecting lower arity types:
+
+```ocaml
+# let immortal =
+    { name = Result.inject (Ok "Keanu")
+    ; age = Result.inject (Error "integer overflow")
+    }
+val immortal : (string -> Result.higher_kinded) person =
+  {name = <abstr>; age = <abstr>}
+```
+
+The resulting type uses a partially applied witness (in the above
+example, `string -> Result.higher_kinded`) that explains how to fill
+in the remaining arguments.
+
+This library is a variation on Jeremy Yallop and Leo White's
+"Lightweight higher-kinded polymorphism".

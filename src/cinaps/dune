@@ -1,0 +1,2 @@
+(library (name higher_kinded_cinaps)
+ (libraries base cinaps_helpers ppxlib stdio) (preprocess (pps ppx_jane)))

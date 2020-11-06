@@ -19,22 +19,22 @@ let%test_module "documentation examples" =
       include Higher_kinded.Make (T)
     end
 
-    type 't mytype = (unit, 't) Higher_kinded.t
+    type 't mytype = (unit -> 't) Higher_kinded.t
 
     let none0 : unit Option.t = Option.None
     and some0 : unit Option.t = Option.Some ()
 
-    let none1 : (unit, Option.witness1) Higher_kinded.t = Option.inject none0
-    and some1 : (unit, Option.witness1) Higher_kinded.t = Option.inject some0
+    let none1 : (unit -> Option.higher_kinded) Higher_kinded.t = Option.inject none0
+    and some1 : (unit -> Option.higher_kinded) Higher_kinded.t = Option.inject some0
 
     let none2 : unit Option.t = Option.project none1
     and some2 : unit Option.t = Option.project some1
 
-    let none1 : Option.witness1 mytype = none1
-    and some1 : Option.witness1 mytype = some1
+    let none1 : Option.higher_kinded mytype = none1
+    and some1 : Option.higher_kinded mytype = some1
 
-    let none1 : unit Option.witness = none1
-    and some1 : unit Option.witness = some1
+    let none1 : (unit -> Option.higher_kinded) Higher_kinded.t = none1
+    and some1 : (unit -> Option.higher_kinded) Higher_kinded.t = some1
 
     let%test_unit "equalities" =
       assert (phys_same none0 none1);
@@ -87,7 +87,7 @@ let%test_module "tests" =
           type nonrec 'a t = ('a, int, int, int, int, int, int, int) t
         end)
 
-      type injected = int witness
+      type injected = (int -> higher_kinded) Higher_kinded.t
     end
 
     module T2 = struct
@@ -95,7 +95,7 @@ let%test_module "tests" =
           type nonrec ('a, 'b) t = ('a, 'b, int, int, int, int, int, int) t
         end)
 
-      type injected = (int, int) witness
+      type injected = (int -> int -> higher_kinded) Higher_kinded.t
     end
 
     module T3 = struct
@@ -103,7 +103,7 @@ let%test_module "tests" =
           type nonrec ('a, 'b, 'c) t = ('a, 'b, 'c, int, int, int, int, int) t
         end)
 
-      type injected = (int, int, int) witness
+      type injected = (int -> int -> int -> higher_kinded) Higher_kinded.t
     end
 
     module T4 = struct
@@ -111,7 +111,7 @@ let%test_module "tests" =
           type nonrec ('a, 'b, 'c, 'd) t = ('a, 'b, 'c, 'd, int, int, int, int) t
         end)
 
-      type injected = (int, int, int, int) witness
+      type injected = (int -> int -> int -> int -> higher_kinded) Higher_kinded.t
     end
 
     module T5 = struct
@@ -119,7 +119,7 @@ let%test_module "tests" =
           type nonrec ('a, 'b, 'c, 'd, 'e) t = ('a, 'b, 'c, 'd, 'e, int, int, int) t
         end)
 
-      type injected = (int, int, int, int, int) witness
+      type injected = (int -> int -> int -> int -> int -> higher_kinded) Higher_kinded.t
     end
 
     module T6 = struct
@@ -127,7 +127,8 @@ let%test_module "tests" =
           type nonrec ('a, 'b, 'c, 'd, 'e, 'f) t = ('a, 'b, 'c, 'd, 'e, 'f, int, int) t
         end)
 
-      type injected = (int, int, int, int, int, int) witness
+      type injected =
+        (int -> int -> int -> int -> int -> int -> higher_kinded) Higher_kinded.t
     end
 
     module T7 = struct
@@ -135,7 +136,8 @@ let%test_module "tests" =
           type nonrec ('a, 'b, 'c, 'd, 'e, 'f, 'g) t = ('a, 'b, 'c, 'd, 'e, 'f, 'g, int) t
         end)
 
-      type injected = (int, int, int, int, int, int, int) witness
+      type injected =
+        (int -> int -> int -> int -> int -> int -> int -> higher_kinded) Higher_kinded.t
     end
 
     module T8 = struct
@@ -144,7 +146,9 @@ let%test_module "tests" =
             ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) t
         end)
 
-      type injected = (int, int, int, int, int, int, int, int) witness
+      type injected =
+        (int -> int -> int -> int -> int -> int -> int -> int -> higher_kinded)
+          Higher_kinded.t
     end
 
     let%test_unit "Make" = test (module T1)
