@@ -192,7 +192,8 @@ end
 module Make_monad_using_witness (M : Monad.S) (X : S with type 'a t := 'a M.t) = struct
   include X
 
-  include Monad_of_monad
+  include
+    Monad_of_monad
       (M)
       (struct
         type nonrec 'a t = ('a -> higher_kinded) t
@@ -208,7 +209,8 @@ module Make_monad_using_witness2
 struct
   include X
 
-  include Monad_of_monad2
+  include
+    Monad_of_monad2
       (M)
       (struct
         type nonrec ('a, 'b) t = ('a -> 'b -> higher_kinded) t
@@ -224,7 +226,8 @@ module Make_monad_using_witness3
 struct
   include X
 
-  include Monad_of_monad3
+  include
+    Monad_of_monad3
       (M)
       (struct
         type nonrec ('a, 'b, 'c) t = ('a -> 'b -> 'c -> higher_kinded) t
