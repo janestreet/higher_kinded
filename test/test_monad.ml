@@ -1,4 +1,4 @@
-open! Core_kernel
+open! Core
 open! Expect_test_helpers_base
 
 (* Given a monad [M], [Make_monad] returns a monad [H] s.t.

@@ -1,4 +1,4 @@
-open Core_kernel
+open Core
 
 let%test_module "documentation examples" =
   (module struct
