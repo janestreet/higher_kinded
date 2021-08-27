@@ -89,5 +89,5 @@ module Short_list = struct
 end
 
 (* js_of_ocaml is too slow to test with long lists. *)
-let%test_module ("List"[@tags "no-js"]) = (module Test (List))
-let%test_module ("List"[@tags "js-only"]) = (module Test (Short_list))
+let%test_module ("List" [@tags "no-js"]) = (module Test (List))
+let%test_module ("List" [@tags "js-only"]) = (module Test (Short_list))

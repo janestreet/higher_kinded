@@ -92,7 +92,6 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
       :  ('a -> 't -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
       -> ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
   end
-
   (*$*)
 
   (** These are the signatures implemented by the [Make_monad] and
@@ -116,7 +115,6 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
       Monad.S3
       with type ('a, 'b, 'c) t := ('a -> 'b -> 'c -> higher_kinded) Higher_kinded.t
   end
-
   (*$*)
 end
 
@@ -257,7 +255,6 @@ module type Higher_kinded = sig
     Monad3
     with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t
     with type higher_kinded := X.higher_kinded
-
   (*$*)
 
   (** {2 Implementations} *)
