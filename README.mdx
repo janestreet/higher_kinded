@@ -139,20 +139,28 @@ module Result :
 ```
 
 You can even use multi-parameter higher kinded witnesses in positions
-expecting lower arity types:
+expecting lower arity types.  For example, suppose that you had an 
+error type defined:
+
+```ocaml
+type error = 
+  | Integer_overflow
+```
+
+Then you could write:
 
 ```ocaml
 # let immortal =
     { name = Result.inject (Ok "Keanu")
-    ; age = Result.inject (Error "integer overflow")
+    ; age = Result.inject (Error Integer_overflow)
     }
-val immortal : (string -> Result.higher_kinded) person =
+val immortal : (error -> Result.higher_kinded) person =
   {name = <abstr>; age = <abstr>}
 ```
 
 The resulting type uses a partially applied witness (in the above
-example, `string -> Result.higher_kinded`) that explains how to fill
-in the remaining arguments.
+example, `error -> Result.higher_kinded`) that explains how to fill in
+the remaining arguments.
 
 This library is a variation on Jeremy Yallop and Leo White's
 "Lightweight higher-kinded polymorphism".
