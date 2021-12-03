@@ -1,4 +1,4 @@
 (library (name higher_kinded_tests)
- (libraries base_quickcheck core_kernel.core
+ (libraries base_quickcheck core
   expect_test_helpers_core.expect_test_helpers_base higher_kinded)
  (preprocess (pps ppx_jane)))
