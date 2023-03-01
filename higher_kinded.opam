@@ -15,6 +15,7 @@ depends: [
   "ppx_jane"
   "dune"     {>= "2.0.0"}
 ]
+available: arch != "arm32" & arch != "x86_32"
 synopsis: "A library with an encoding of higher kinded types in OCaml"
 description: "
 OCaml natively supports parameterized type constructors, such as =option=. The parameters
