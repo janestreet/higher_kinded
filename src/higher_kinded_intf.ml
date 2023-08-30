@@ -113,7 +113,7 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
 
     include
       Monad.S3
-      with type ('a, 'b, 'c) t := ('a -> 'b -> 'c -> higher_kinded) Higher_kinded.t
+        with type ('a, 'b, 'c) t := ('a -> 'b -> 'c -> higher_kinded) Higher_kinded.t
   end
   (*$*)
 end
@@ -122,9 +122,7 @@ module type Higher_kinded = sig
   (** This library allows you to use higher-kinded types in OCaml. See the README for a
       short tutorial on what that means and how to use it. *)
 
-
   (** {2 Types} *)
-
 
   (** If [A] implements the signature [S], [(a, A.witness1) t] is equivalent to [a A.t].
   *)
@@ -195,8 +193,8 @@ module type Higher_kinded = sig
   (** {2 Signatures} *)
 
   include module type of Higher_kinded_module_types (struct
-      type nonrec 'a t = 'a t
-    end)
+    type nonrec 'a t = 'a t
+  end)
 
   (** {2 Functors} *)
 
@@ -205,38 +203,38 @@ module type Higher_kinded = sig
 
   (*$ Higher_kinded_cinaps.print_functor_types () *)
   module Make (X : sig
-      type 'a t
-    end) : S with type 'a t := 'a X.t
+    type 'a t
+  end) : S with type 'a t := 'a X.t
 
   module Make2 (X : sig
-      type ('a, 'z) t
-    end) : S2 with type ('a, 'z) t := ('a, 'z) X.t
+    type ('a, 'z) t
+  end) : S2 with type ('a, 'z) t := ('a, 'z) X.t
 
   module Make3 (X : sig
-      type ('a, 'y, 'z) t
-    end) : S3 with type ('a, 'y, 'z) t := ('a, 'y, 'z) X.t
+    type ('a, 'y, 'z) t
+  end) : S3 with type ('a, 'y, 'z) t := ('a, 'y, 'z) X.t
 
   module Make4 (X : sig
-      type ('a, 'x, 'y, 'z) t
-    end) : S4 with type ('a, 'x, 'y, 'z) t := ('a, 'x, 'y, 'z) X.t
+    type ('a, 'x, 'y, 'z) t
+  end) : S4 with type ('a, 'x, 'y, 'z) t := ('a, 'x, 'y, 'z) X.t
 
   module Make5 (X : sig
-      type ('a, 'w, 'x, 'y, 'z) t
-    end) : S5 with type ('a, 'w, 'x, 'y, 'z) t := ('a, 'w, 'x, 'y, 'z) X.t
+    type ('a, 'w, 'x, 'y, 'z) t
+  end) : S5 with type ('a, 'w, 'x, 'y, 'z) t := ('a, 'w, 'x, 'y, 'z) X.t
 
   module Make6 (X : sig
-      type ('a, 'v, 'w, 'x, 'y, 'z) t
-    end) : S6 with type ('a, 'v, 'w, 'x, 'y, 'z) t := ('a, 'v, 'w, 'x, 'y, 'z) X.t
+    type ('a, 'v, 'w, 'x, 'y, 'z) t
+  end) : S6 with type ('a, 'v, 'w, 'x, 'y, 'z) t := ('a, 'v, 'w, 'x, 'y, 'z) X.t
 
   module Make7 (X : sig
-      type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
-    end) : S7 with type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 'u, 'v, 'w, 'x, 'y, 'z) X.t
+    type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
+  end) : S7 with type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 'u, 'v, 'w, 'x, 'y, 'z) X.t
 
   module Make8 (X : sig
-      type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
-    end) :
+    type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
+  end) :
     S8
-    with type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t
+      with type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t
 
   module Make_monad (M : Monad.S) : Monad with type 'a t := 'a M.t
   module Make_monad2 (M : Monad.S2) : Monad2 with type ('a, 'b) t := ('a, 'b) M.t
@@ -246,16 +244,16 @@ module type Higher_kinded = sig
     Monad with type 'a t := 'a M.t with type higher_kinded := X.higher_kinded
 
   module Make_monad_using_witness2
-      (M : Monad.S2)
-      (X : S2 with type ('a, 'b) t := ('a, 'b) M.t) :
+    (M : Monad.S2)
+    (X : S2 with type ('a, 'b) t := ('a, 'b) M.t) :
     Monad2 with type ('a, 'b) t := ('a, 'b) M.t with type higher_kinded := X.higher_kinded
 
   module Make_monad_using_witness3
-      (M : Monad.S3)
-      (X : S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t) :
+    (M : Monad.S3)
+    (X : S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t) :
     Monad3
-    with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t
-    with type higher_kinded := X.higher_kinded
+      with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t
+      with type higher_kinded := X.higher_kinded
   (*$*)
 
   (** {2 Implementations} *)
@@ -283,4 +281,3 @@ module type Higher_kinded = sig
   (** [t] itself has one type parameter, so we might as well implement [S] right here. *)
   include S with type 'a t := 'a t
 end
-

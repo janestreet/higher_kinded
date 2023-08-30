@@ -74,58 +74,58 @@ let%test_module "tests" =
         ~sexp_of:[%sexp_of: (int, int, int, int, int, int, int, int) t]
         ~shrinker:[%shrinker: (int, int, int, int, int, int, int, int) t]
         ~f:(fun orig ->
-          let injected = M.inject orig in
-          assert (phys_same orig injected);
-          let projected = M.project injected in
-          assert (phys_same injected projected);
-          assert (
-            [%compare.equal: (int, int, int, int, int, int, int, int) t] orig projected))
+        let injected = M.inject orig in
+        assert (phys_same orig injected);
+        let projected = M.project injected in
+        assert (phys_same injected projected);
+        assert (
+          [%compare.equal: (int, int, int, int, int, int, int, int) t] orig projected))
     ;;
 
     module T1 = struct
       include Higher_kinded.Make (struct
-          type nonrec 'a t = ('a, int, int, int, int, int, int, int) t
-        end)
+        type nonrec 'a t = ('a, int, int, int, int, int, int, int) t
+      end)
 
       type injected = (int -> higher_kinded) Higher_kinded.t
     end
 
     module T2 = struct
       include Higher_kinded.Make2 (struct
-          type nonrec ('a, 'b) t = ('a, 'b, int, int, int, int, int, int) t
-        end)
+        type nonrec ('a, 'b) t = ('a, 'b, int, int, int, int, int, int) t
+      end)
 
       type injected = (int -> int -> higher_kinded) Higher_kinded.t
     end
 
     module T3 = struct
       include Higher_kinded.Make3 (struct
-          type nonrec ('a, 'b, 'c) t = ('a, 'b, 'c, int, int, int, int, int) t
-        end)
+        type nonrec ('a, 'b, 'c) t = ('a, 'b, 'c, int, int, int, int, int) t
+      end)
 
       type injected = (int -> int -> int -> higher_kinded) Higher_kinded.t
     end
 
     module T4 = struct
       include Higher_kinded.Make4 (struct
-          type nonrec ('a, 'b, 'c, 'd) t = ('a, 'b, 'c, 'd, int, int, int, int) t
-        end)
+        type nonrec ('a, 'b, 'c, 'd) t = ('a, 'b, 'c, 'd, int, int, int, int) t
+      end)
 
       type injected = (int -> int -> int -> int -> higher_kinded) Higher_kinded.t
     end
 
     module T5 = struct
       include Higher_kinded.Make5 (struct
-          type nonrec ('a, 'b, 'c, 'd, 'e) t = ('a, 'b, 'c, 'd, 'e, int, int, int) t
-        end)
+        type nonrec ('a, 'b, 'c, 'd, 'e) t = ('a, 'b, 'c, 'd, 'e, int, int, int) t
+      end)
 
       type injected = (int -> int -> int -> int -> int -> higher_kinded) Higher_kinded.t
     end
 
     module T6 = struct
       include Higher_kinded.Make6 (struct
-          type nonrec ('a, 'b, 'c, 'd, 'e, 'f) t = ('a, 'b, 'c, 'd, 'e, 'f, int, int) t
-        end)
+        type nonrec ('a, 'b, 'c, 'd, 'e, 'f) t = ('a, 'b, 'c, 'd, 'e, 'f, int, int) t
+      end)
 
       type injected =
         (int -> int -> int -> int -> int -> int -> higher_kinded) Higher_kinded.t
@@ -133,8 +133,8 @@ let%test_module "tests" =
 
     module T7 = struct
       include Higher_kinded.Make7 (struct
-          type nonrec ('a, 'b, 'c, 'd, 'e, 'f, 'g) t = ('a, 'b, 'c, 'd, 'e, 'f, 'g, int) t
-        end)
+        type nonrec ('a, 'b, 'c, 'd, 'e, 'f, 'g) t = ('a, 'b, 'c, 'd, 'e, 'f, 'g, int) t
+      end)
 
       type injected =
         (int -> int -> int -> int -> int -> int -> int -> higher_kinded) Higher_kinded.t
@@ -142,13 +142,13 @@ let%test_module "tests" =
 
     module T8 = struct
       include Higher_kinded.Make8 (struct
-          type nonrec ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) t =
-            ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) t
-        end)
+        type nonrec ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) t =
+          ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) t
+      end)
 
       type injected =
         (int -> int -> int -> int -> int -> int -> int -> int -> higher_kinded)
-          Higher_kinded.t
+        Higher_kinded.t
     end
 
     let%test_unit "Make" = test (module T1)
