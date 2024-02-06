@@ -1,2 +1,5 @@
-(library (name higher_kinded_cinaps) (libraries base cinaps_helpers ppxlib)
- (preprocess (pps ppx_jane)))
+(library
+ (name higher_kinded_cinaps)
+ (libraries base cinaps_helpers ppxlib)
+ (preprocess
+  (pps ppx_jane)))
