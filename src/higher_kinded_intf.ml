@@ -113,7 +113,7 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
 
     include
       Monad.S3
-        with type ('a, 'b, 'c) t := ('a -> 'b -> 'c -> higher_kinded) Higher_kinded.t
+      with type ('a, 'b, 'c) t := ('a -> 'b -> 'c -> higher_kinded) Higher_kinded.t
   end
   (*$*)
 end
@@ -131,59 +131,59 @@ module type Higher_kinded = sig
   (*$ Higher_kinded_cinaps.print_type_aliases ~include_comments:true *)
 
   (** If [A] implements the signature [S],
-      [('a, A.higher_kinded) t1]
-      is equivalent to
-      ['a A.t]. *)
+    [('a, A.higher_kinded) t1]
+    is equivalent to
+    ['a A.t]. *)
 
   type ('a, 'witness) t1 = ('a -> 'witness) t
 
   (** If [A] implements the signature [S2],
-      [('a, 'b, A.higher_kinded) t2]
-      is equivalent to
-      [('a, 'b) A.t]. *)
+    [('a, 'b, A.higher_kinded) t2]
+    is equivalent to
+    [('a, 'b) A.t]. *)
 
   type ('a, 'b, 'witness) t2 = ('a, 'b -> 'witness) t1
 
   (** If [A] implements the signature [S3],
-      [('a, 'b, 'c, A.higher_kinded) t3]
-      is equivalent to
-      [('a, 'b, 'c) A.t]. *)
+    [('a, 'b, 'c, A.higher_kinded) t3]
+    is equivalent to
+    [('a, 'b, 'c) A.t]. *)
 
   type ('a, 'b, 'c, 'witness) t3 = ('a, 'b, 'c -> 'witness) t2
 
   (** If [A] implements the signature [S4],
-      [('a, 'b, 'c, 'd, A.higher_kinded) t4]
-      is equivalent to
-      [('a, 'b, 'c, 'd) A.t]. *)
+    [('a, 'b, 'c, 'd, A.higher_kinded) t4]
+    is equivalent to
+    [('a, 'b, 'c, 'd) A.t]. *)
 
   type ('a, 'b, 'c, 'd, 'witness) t4 = ('a, 'b, 'c, 'd -> 'witness) t3
 
   (** If [A] implements the signature [S5],
-      [('a, 'b, 'c, 'd, 'e, A.higher_kinded) t5]
-      is equivalent to
-      [('a, 'b, 'c, 'd, 'e) A.t]. *)
+    [('a, 'b, 'c, 'd, 'e, A.higher_kinded) t5]
+    is equivalent to
+    [('a, 'b, 'c, 'd, 'e) A.t]. *)
 
   type ('a, 'b, 'c, 'd, 'e, 'witness) t5 = ('a, 'b, 'c, 'd, 'e -> 'witness) t4
 
   (** If [A] implements the signature [S6],
-      [('a, 'b, 'c, 'd, 'e, 'f, A.higher_kinded) t6]
-      is equivalent to
-      [('a, 'b, 'c, 'd, 'e, 'f) A.t]. *)
+    [('a, 'b, 'c, 'd, 'e, 'f, A.higher_kinded) t6]
+    is equivalent to
+    [('a, 'b, 'c, 'd, 'e, 'f) A.t]. *)
 
   type ('a, 'b, 'c, 'd, 'e, 'f, 'witness) t6 = ('a, 'b, 'c, 'd, 'e, 'f -> 'witness) t5
 
   (** If [A] implements the signature [S7],
-      [('a, 'b, 'c, 'd, 'e, 'f, 'g, A.higher_kinded) t7]
-      is equivalent to
-      [('a, 'b, 'c, 'd, 'e, 'f, 'g) A.t]. *)
+    [('a, 'b, 'c, 'd, 'e, 'f, 'g, A.higher_kinded) t7]
+    is equivalent to
+    [('a, 'b, 'c, 'd, 'e, 'f, 'g) A.t]. *)
 
   type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'witness) t7 =
     ('a, 'b, 'c, 'd, 'e, 'f, 'g -> 'witness) t6
 
   (** If [A] implements the signature [S8],
-      [('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, A.higher_kinded) t8]
-      is equivalent to
-      [('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) A.t]. *)
+    [('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, A.higher_kinded) t8]
+    is equivalent to
+    [('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) A.t]. *)
 
   type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'witness) t8 =
     ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h -> 'witness) t7
@@ -193,8 +193,8 @@ module type Higher_kinded = sig
   (** {2 Signatures} *)
 
   include module type of Higher_kinded_module_types (struct
-    type nonrec 'a t = 'a t
-  end)
+      type nonrec 'a t = 'a t
+    end)
 
   (** {2 Functors} *)
 
@@ -203,38 +203,38 @@ module type Higher_kinded = sig
 
   (*$ Higher_kinded_cinaps.print_functor_types () *)
   module Make (X : sig
-    type 'a t
-  end) : S with type 'a t := 'a X.t
+      type 'a t
+    end) : S with type 'a t := 'a X.t
 
   module Make2 (X : sig
-    type ('a, 'z) t
-  end) : S2 with type ('a, 'z) t := ('a, 'z) X.t
+      type ('a, 'z) t
+    end) : S2 with type ('a, 'z) t := ('a, 'z) X.t
 
   module Make3 (X : sig
-    type ('a, 'y, 'z) t
-  end) : S3 with type ('a, 'y, 'z) t := ('a, 'y, 'z) X.t
+      type ('a, 'y, 'z) t
+    end) : S3 with type ('a, 'y, 'z) t := ('a, 'y, 'z) X.t
 
   module Make4 (X : sig
-    type ('a, 'x, 'y, 'z) t
-  end) : S4 with type ('a, 'x, 'y, 'z) t := ('a, 'x, 'y, 'z) X.t
+      type ('a, 'x, 'y, 'z) t
+    end) : S4 with type ('a, 'x, 'y, 'z) t := ('a, 'x, 'y, 'z) X.t
 
   module Make5 (X : sig
-    type ('a, 'w, 'x, 'y, 'z) t
-  end) : S5 with type ('a, 'w, 'x, 'y, 'z) t := ('a, 'w, 'x, 'y, 'z) X.t
+      type ('a, 'w, 'x, 'y, 'z) t
+    end) : S5 with type ('a, 'w, 'x, 'y, 'z) t := ('a, 'w, 'x, 'y, 'z) X.t
 
   module Make6 (X : sig
-    type ('a, 'v, 'w, 'x, 'y, 'z) t
-  end) : S6 with type ('a, 'v, 'w, 'x, 'y, 'z) t := ('a, 'v, 'w, 'x, 'y, 'z) X.t
+      type ('a, 'v, 'w, 'x, 'y, 'z) t
+    end) : S6 with type ('a, 'v, 'w, 'x, 'y, 'z) t := ('a, 'v, 'w, 'x, 'y, 'z) X.t
 
   module Make7 (X : sig
-    type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
-  end) : S7 with type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 'u, 'v, 'w, 'x, 'y, 'z) X.t
+      type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
+    end) : S7 with type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 'u, 'v, 'w, 'x, 'y, 'z) X.t
 
   module Make8 (X : sig
-    type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
-  end) :
+      type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
+    end) :
     S8
-      with type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t
+    with type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t
 
   module Make_monad (M : Monad.S) : Monad with type 'a t := 'a M.t
   module Make_monad2 (M : Monad.S2) : Monad2 with type ('a, 'b) t := ('a, 'b) M.t
@@ -244,16 +244,16 @@ module type Higher_kinded = sig
     Monad with type 'a t := 'a M.t with type higher_kinded := X.higher_kinded
 
   module Make_monad_using_witness2
-    (M : Monad.S2)
-    (X : S2 with type ('a, 'b) t := ('a, 'b) M.t) :
+      (M : Monad.S2)
+      (X : S2 with type ('a, 'b) t := ('a, 'b) M.t) :
     Monad2 with type ('a, 'b) t := ('a, 'b) M.t with type higher_kinded := X.higher_kinded
 
   module Make_monad_using_witness3
-    (M : Monad.S3)
-    (X : S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t) :
+      (M : Monad.S3)
+      (X : S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t) :
     Monad3
-      with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t
-      with type higher_kinded := X.higher_kinded
+    with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t
+    with type higher_kinded := X.higher_kinded
   (*$*)
 
   (** {2 Implementations} *)

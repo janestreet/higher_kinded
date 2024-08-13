@@ -39,7 +39,8 @@ end
 ;;
 
 let module_type_T n =
-  [%string {|
+  [%string
+    {|
 sig
   type %{Core_type.constr "t" (tyvars n)#Core_type}
 end
@@ -148,7 +149,8 @@ let print_type_aliases ~include_comments =
     [%{a#Core_type}]. *)
 |}]
     in
-    [%string {|
+    [%string
+      {|
 
 %{comment}
 type %{this_t#Core_type} = %{prev_t#Core_type}

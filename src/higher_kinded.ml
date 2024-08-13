@@ -21,31 +21,33 @@ type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'witness) t8 =
 (*$*)
 
 include Higher_kinded_module_types (struct
-  type nonrec 'a t = 'a t
-end)
+    type nonrec 'a t = 'a t
+  end)
 
 module Monad_of_monad3
-  (M : Monad.S3) (T : sig
-    type ('a, 'b, 'c) t
+    (M : Monad.S3)
+    (T : sig
+       type ('a, 'b, 'c) t
 
-    val to_monad : ('a, 'b, 'c) t -> ('a, 'b, 'c) M.t
-    val of_monad : ('a, 'b, 'c) M.t -> ('a, 'b, 'c) t
-  end) =
+       val to_monad : ('a, 'b, 'c) t -> ('a, 'b, 'c) M.t
+       val of_monad : ('a, 'b, 'c) M.t -> ('a, 'b, 'c) t
+     end) =
 Monad.Make3 (struct
-  type ('a, 'b, 'c) t = ('a, 'b, 'c) T.t
+    type ('a, 'b, 'c) t = ('a, 'b, 'c) T.t
 
-  let return a = T.of_monad (M.return a)
-  let bind t ~f = M.bind (T.to_monad t) ~f:(fun a -> T.to_monad (f a)) |> T.of_monad
-  let map = `Custom (fun t ~f -> M.map (T.to_monad t) ~f |> T.of_monad)
-end)
+    let return a = T.of_monad (M.return a)
+    let bind t ~f = M.bind (T.to_monad t) ~f:(fun a -> T.to_monad (f a)) |> T.of_monad
+    let map = `Custom (fun t ~f -> M.map (T.to_monad t) ~f |> T.of_monad)
+  end)
 
 module Monad_of_monad2
-  (M : Monad.S2) (T : sig
-    type ('a, 'b) t
+    (M : Monad.S2)
+    (T : sig
+       type ('a, 'b) t
 
-    val to_monad : ('a, 'b) t -> ('a, 'b) M.t
-    val of_monad : ('a, 'b) M.t -> ('a, 'b) t
-  end) =
+       val to_monad : ('a, 'b) t -> ('a, 'b) M.t
+       val of_monad : ('a, 'b) M.t -> ('a, 'b) t
+     end) =
   Monad_of_monad3
     (struct
       type ('a, 'b, 'c) t = ('a, 'b) M.t
@@ -59,12 +61,13 @@ module Monad_of_monad2
     end)
 
 module Monad_of_monad
-  (M : Monad.S) (T : sig
-    type 'a t
+    (M : Monad.S)
+    (T : sig
+       type 'a t
 
-    val to_monad : 'a t -> 'a M.t
-    val of_monad : 'a M.t -> 'a t
-  end) =
+       val to_monad : 'a t -> 'a M.t
+       val of_monad : 'a M.t -> 'a t
+     end) =
   Monad_of_monad2
     (struct
       type ('a, 'b) t = 'a M.t
@@ -79,8 +82,8 @@ module Monad_of_monad
 
 (*$ Higher_kinded_cinaps.print_functor_implementations () *)
 module Make (X : sig
-  type 'a t
-end) : S with type 'a t := 'a X.t = struct
+    type 'a t
+  end) : S with type 'a t := 'a X.t = struct
   type higher_kinded
 
   external inject : 'a X.t -> ('a -> higher_kinded) t = "%identity"
@@ -88,8 +91,8 @@ end) : S with type 'a t := 'a X.t = struct
 end
 
 module Make2 (X : sig
-  type ('a, 'z) t
-end) : S2 with type ('a, 'z) t := ('a, 'z) X.t = struct
+    type ('a, 'z) t
+  end) : S2 with type ('a, 'z) t := ('a, 'z) X.t = struct
   type higher_kinded
 
   external inject : ('a, 'z) X.t -> ('a -> 'z -> higher_kinded) t = "%identity"
@@ -97,8 +100,8 @@ end) : S2 with type ('a, 'z) t := ('a, 'z) X.t = struct
 end
 
 module Make3 (X : sig
-  type ('a, 'y, 'z) t
-end) : S3 with type ('a, 'y, 'z) t := ('a, 'y, 'z) X.t = struct
+    type ('a, 'y, 'z) t
+  end) : S3 with type ('a, 'y, 'z) t := ('a, 'y, 'z) X.t = struct
   type higher_kinded
 
   external inject : ('a, 'y, 'z) X.t -> ('a -> 'y -> 'z -> higher_kinded) t = "%identity"
@@ -106,8 +109,8 @@ end) : S3 with type ('a, 'y, 'z) t := ('a, 'y, 'z) X.t = struct
 end
 
 module Make4 (X : sig
-  type ('a, 'x, 'y, 'z) t
-end) : S4 with type ('a, 'x, 'y, 'z) t := ('a, 'x, 'y, 'z) X.t = struct
+    type ('a, 'x, 'y, 'z) t
+  end) : S4 with type ('a, 'x, 'y, 'z) t := ('a, 'x, 'y, 'z) X.t = struct
   type higher_kinded
 
   external inject
@@ -122,8 +125,8 @@ end) : S4 with type ('a, 'x, 'y, 'z) t := ('a, 'x, 'y, 'z) X.t = struct
 end
 
 module Make5 (X : sig
-  type ('a, 'w, 'x, 'y, 'z) t
-end) : S5 with type ('a, 'w, 'x, 'y, 'z) t := ('a, 'w, 'x, 'y, 'z) X.t = struct
+    type ('a, 'w, 'x, 'y, 'z) t
+  end) : S5 with type ('a, 'w, 'x, 'y, 'z) t := ('a, 'w, 'x, 'y, 'z) X.t = struct
   type higher_kinded
 
   external inject
@@ -138,8 +141,8 @@ end) : S5 with type ('a, 'w, 'x, 'y, 'z) t := ('a, 'w, 'x, 'y, 'z) X.t = struct
 end
 
 module Make6 (X : sig
-  type ('a, 'v, 'w, 'x, 'y, 'z) t
-end) : S6 with type ('a, 'v, 'w, 'x, 'y, 'z) t := ('a, 'v, 'w, 'x, 'y, 'z) X.t = struct
+    type ('a, 'v, 'w, 'x, 'y, 'z) t
+  end) : S6 with type ('a, 'v, 'w, 'x, 'y, 'z) t := ('a, 'v, 'w, 'x, 'y, 'z) X.t = struct
   type higher_kinded
 
   external inject
@@ -154,8 +157,8 @@ end) : S6 with type ('a, 'v, 'w, 'x, 'y, 'z) t := ('a, 'v, 'w, 'x, 'y, 'z) X.t =
 end
 
 module Make7 (X : sig
-  type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
-end) : S7 with type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 'u, 'v, 'w, 'x, 'y, 'z) X.t =
+    type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
+  end) : S7 with type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 'u, 'v, 'w, 'x, 'y, 'z) X.t =
 struct
   type higher_kinded
 
@@ -171,8 +174,8 @@ struct
 end
 
 module Make8 (X : sig
-  type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
-end) :
+    type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
+  end) :
   S8 with type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t := ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t =
 struct
   type higher_kinded
@@ -203,8 +206,8 @@ module Make_monad_using_witness (M : Monad.S) (X : S with type 'a t := 'a M.t) =
 end
 
 module Make_monad_using_witness2
-  (M : Monad.S2)
-  (X : S2 with type ('a, 'b) t := ('a, 'b) M.t) =
+    (M : Monad.S2)
+    (X : S2 with type ('a, 'b) t := ('a, 'b) M.t) =
 struct
   include X
 
@@ -220,8 +223,8 @@ struct
 end
 
 module Make_monad_using_witness3
-  (M : Monad.S3)
-  (X : S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t) =
+    (M : Monad.S3)
+    (X : S3 with type ('a, 'b, 'c) t := ('a, 'b, 'c) M.t) =
 struct
   include X
 
@@ -242,8 +245,8 @@ module Make_monad3 (M : Monad.S3) = Make_monad_using_witness3 (M) (Make3 (M))
 
 (*$*)
 include Make (struct
-  type nonrec 'a t = 'a t
-end)
+    type nonrec 'a t = 'a t
+  end)
 
 module Array = Make (Array)
 module Either = Make2 (Either)

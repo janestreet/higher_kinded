@@ -27,10 +27,10 @@ module Test (M : S) : sig end = struct
   end
 
   let bisimulate (module M : Bisimulation) =
-    require_does_not_raise [%here] (fun () ->
+    require_does_not_raise (fun () ->
       Base_quickcheck.Test.run_exn
         (module M)
-        ~f:(fun x -> require_equal [%here] (module M.Output) (M.f1 x) (M.f2 x)))
+        ~f:(fun x -> require_equal (module M.Output) (M.f1 x) (M.f2 x)))
   ;;
 
   let%expect_test "[H.return] is [M.return] modulo [inject]/[project]" =
