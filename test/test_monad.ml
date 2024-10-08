@@ -75,7 +75,7 @@ module Test (M : S) : sig end = struct
   ;;
 end
 
-let%test_module "Option" = (module Test (Option))
+module%test Option = Test (Option)
 
 module Short_list = struct
   include List
@@ -89,5 +89,5 @@ module Short_list = struct
 end
 
 (* js_of_ocaml is too slow to test with long lists. *)
-let%test_module ("List" [@tags "no-js"]) = (module Test (List))
-let%test_module ("List" [@tags "js-only"]) = (module Test (Short_list))
+module%test [@tags "no-js"] List = Test (List)
+module%test [@tags "js-only"] List = Test (Short_list)
