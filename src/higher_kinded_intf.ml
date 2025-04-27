@@ -124,66 +124,51 @@ module type Higher_kinded = sig
 
   (** {2 Types} *)
 
-  (** If [A] implements the signature [S], [(a, A.witness1) t] is equivalent to [a A.t].
-  *)
+  (** If [A] implements the signature [S], [(a, A.witness1) t] is equivalent to [a A.t]. *)
   type 'a t
 
   (*$ Higher_kinded_cinaps.print_type_aliases ~include_comments:true *)
 
-  (** If [A] implements the signature [S],
-    [('a, A.higher_kinded) t1]
-    is equivalent to
-    ['a A.t]. *)
+  (** If [A] implements the signature [S], [('a, A.higher_kinded) t1] is equivalent to
+      ['a A.t]. *)
 
   type ('a, 'witness) t1 = ('a -> 'witness) t
 
-  (** If [A] implements the signature [S2],
-    [('a, 'b, A.higher_kinded) t2]
-    is equivalent to
-    [('a, 'b) A.t]. *)
+  (** If [A] implements the signature [S2], [('a, 'b, A.higher_kinded) t2] is equivalent
+      to [('a, 'b) A.t]. *)
 
   type ('a, 'b, 'witness) t2 = ('a, 'b -> 'witness) t1
 
-  (** If [A] implements the signature [S3],
-    [('a, 'b, 'c, A.higher_kinded) t3]
-    is equivalent to
-    [('a, 'b, 'c) A.t]. *)
+  (** If [A] implements the signature [S3], [('a, 'b, 'c, A.higher_kinded) t3] is
+      equivalent to [('a, 'b, 'c) A.t]. *)
 
   type ('a, 'b, 'c, 'witness) t3 = ('a, 'b, 'c -> 'witness) t2
 
-  (** If [A] implements the signature [S4],
-    [('a, 'b, 'c, 'd, A.higher_kinded) t4]
-    is equivalent to
-    [('a, 'b, 'c, 'd) A.t]. *)
+  (** If [A] implements the signature [S4], [('a, 'b, 'c, 'd, A.higher_kinded) t4] is
+      equivalent to [('a, 'b, 'c, 'd) A.t]. *)
 
   type ('a, 'b, 'c, 'd, 'witness) t4 = ('a, 'b, 'c, 'd -> 'witness) t3
 
-  (** If [A] implements the signature [S5],
-    [('a, 'b, 'c, 'd, 'e, A.higher_kinded) t5]
-    is equivalent to
-    [('a, 'b, 'c, 'd, 'e) A.t]. *)
+  (** If [A] implements the signature [S5], [('a, 'b, 'c, 'd, 'e, A.higher_kinded) t5] is
+      equivalent to [('a, 'b, 'c, 'd, 'e) A.t]. *)
 
   type ('a, 'b, 'c, 'd, 'e, 'witness) t5 = ('a, 'b, 'c, 'd, 'e -> 'witness) t4
 
-  (** If [A] implements the signature [S6],
-    [('a, 'b, 'c, 'd, 'e, 'f, A.higher_kinded) t6]
-    is equivalent to
-    [('a, 'b, 'c, 'd, 'e, 'f) A.t]. *)
+  (** If [A] implements the signature [S6], [('a, 'b, 'c, 'd, 'e, 'f, A.higher_kinded) t6]
+      is equivalent to [('a, 'b, 'c, 'd, 'e, 'f) A.t]. *)
 
   type ('a, 'b, 'c, 'd, 'e, 'f, 'witness) t6 = ('a, 'b, 'c, 'd, 'e, 'f -> 'witness) t5
 
   (** If [A] implements the signature [S7],
-    [('a, 'b, 'c, 'd, 'e, 'f, 'g, A.higher_kinded) t7]
-    is equivalent to
-    [('a, 'b, 'c, 'd, 'e, 'f, 'g) A.t]. *)
+      [('a, 'b, 'c, 'd, 'e, 'f, 'g, A.higher_kinded) t7] is equivalent to
+      [('a, 'b, 'c, 'd, 'e, 'f, 'g) A.t]. *)
 
   type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'witness) t7 =
     ('a, 'b, 'c, 'd, 'e, 'f, 'g -> 'witness) t6
 
   (** If [A] implements the signature [S8],
-    [('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, A.higher_kinded) t8]
-    is equivalent to
-    [('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) A.t]. *)
+      [('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, A.higher_kinded) t8] is equivalent to
+      [('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h) A.t]. *)
 
   type ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h, 'witness) t8 =
     ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h -> 'witness) t7
