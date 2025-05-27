@@ -4,7 +4,7 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
   (** These are the signatures implemented by the [Make] family of functors. *)
 
   (*$ Higher_kinded_cinaps.print_module_type_s () *)
-  module type S = sig
+  module type S = sig @@ portable
     type 'a t
     type higher_kinded
 
@@ -12,7 +12,7 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
     val project : ('a -> higher_kinded) Higher_kinded.t -> 'a t
   end
 
-  module type S2 = sig
+  module type S2 = sig @@ portable
     type ('a, 'z) t
     type higher_kinded
 
@@ -20,7 +20,7 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
     val project : ('a -> 'z -> higher_kinded) Higher_kinded.t -> ('a, 'z) t
   end
 
-  module type S3 = sig
+  module type S3 = sig @@ portable
     type ('a, 'y, 'z) t
     type higher_kinded
 
@@ -28,7 +28,7 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
     val project : ('a -> 'y -> 'z -> higher_kinded) Higher_kinded.t -> ('a, 'y, 'z) t
   end
 
-  module type S4 = sig
+  module type S4 = sig @@ portable
     type ('a, 'x, 'y, 'z) t
     type higher_kinded
 
@@ -41,7 +41,7 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
       -> ('a, 'x, 'y, 'z) t
   end
 
-  module type S5 = sig
+  module type S5 = sig @@ portable
     type ('a, 'w, 'x, 'y, 'z) t
     type higher_kinded
 
@@ -54,7 +54,7 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
       -> ('a, 'w, 'x, 'y, 'z) t
   end
 
-  module type S6 = sig
+  module type S6 = sig @@ portable
     type ('a, 'v, 'w, 'x, 'y, 'z) t
     type higher_kinded
 
@@ -67,7 +67,7 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
       -> ('a, 'v, 'w, 'x, 'y, 'z) t
   end
 
-  module type S7 = sig
+  module type S7 = sig @@ portable
     type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
     type higher_kinded
 
@@ -80,7 +80,7 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
       -> ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
   end
 
-  module type S8 = sig
+  module type S8 = sig @@ portable
     type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
     type higher_kinded
 

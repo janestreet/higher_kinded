@@ -86,8 +86,8 @@ module Make (X : sig
   end) : S with type 'a t := 'a X.t = struct
   type higher_kinded
 
-  external inject : 'a X.t -> ('a -> higher_kinded) t = "%identity"
-  external project : ('a -> higher_kinded) t -> 'a X.t = "%identity"
+  external inject : 'a X.t -> ('a -> higher_kinded) t @@ portable = "%identity"
+  external project : ('a -> higher_kinded) t -> 'a X.t @@ portable = "%identity"
 end
 
 module Make2 (X : sig
@@ -95,8 +95,17 @@ module Make2 (X : sig
   end) : S2 with type ('a, 'z) t := ('a, 'z) X.t = struct
   type higher_kinded
 
-  external inject : ('a, 'z) X.t -> ('a -> 'z -> higher_kinded) t = "%identity"
-  external project : ('a -> 'z -> higher_kinded) t -> ('a, 'z) X.t = "%identity"
+  external inject
+    :  ('a, 'z) X.t
+    -> ('a -> 'z -> higher_kinded) t
+    @@ portable
+    = "%identity"
+
+  external project
+    :  ('a -> 'z -> higher_kinded) t
+    -> ('a, 'z) X.t
+    @@ portable
+    = "%identity"
 end
 
 module Make3 (X : sig
@@ -104,8 +113,17 @@ module Make3 (X : sig
   end) : S3 with type ('a, 'y, 'z) t := ('a, 'y, 'z) X.t = struct
   type higher_kinded
 
-  external inject : ('a, 'y, 'z) X.t -> ('a -> 'y -> 'z -> higher_kinded) t = "%identity"
-  external project : ('a -> 'y -> 'z -> higher_kinded) t -> ('a, 'y, 'z) X.t = "%identity"
+  external inject
+    :  ('a, 'y, 'z) X.t
+    -> ('a -> 'y -> 'z -> higher_kinded) t
+    @@ portable
+    = "%identity"
+
+  external project
+    :  ('a -> 'y -> 'z -> higher_kinded) t
+    -> ('a, 'y, 'z) X.t
+    @@ portable
+    = "%identity"
 end
 
 module Make4 (X : sig
@@ -116,11 +134,13 @@ module Make4 (X : sig
   external inject
     :  ('a, 'x, 'y, 'z) X.t
     -> ('a -> 'x -> 'y -> 'z -> higher_kinded) t
+    @@ portable
     = "%identity"
 
   external project
     :  ('a -> 'x -> 'y -> 'z -> higher_kinded) t
     -> ('a, 'x, 'y, 'z) X.t
+    @@ portable
     = "%identity"
 end
 
@@ -132,11 +152,13 @@ module Make5 (X : sig
   external inject
     :  ('a, 'w, 'x, 'y, 'z) X.t
     -> ('a -> 'w -> 'x -> 'y -> 'z -> higher_kinded) t
+    @@ portable
     = "%identity"
 
   external project
     :  ('a -> 'w -> 'x -> 'y -> 'z -> higher_kinded) t
     -> ('a, 'w, 'x, 'y, 'z) X.t
+    @@ portable
     = "%identity"
 end
 
@@ -148,11 +170,13 @@ module Make6 (X : sig
   external inject
     :  ('a, 'v, 'w, 'x, 'y, 'z) X.t
     -> ('a -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) t
+    @@ portable
     = "%identity"
 
   external project
     :  ('a -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) t
     -> ('a, 'v, 'w, 'x, 'y, 'z) X.t
+    @@ portable
     = "%identity"
 end
 
@@ -165,11 +189,13 @@ struct
   external inject
     :  ('a, 'u, 'v, 'w, 'x, 'y, 'z) X.t
     -> ('a -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) t
+    @@ portable
     = "%identity"
 
   external project
     :  ('a -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) t
     -> ('a, 'u, 'v, 'w, 'x, 'y, 'z) X.t
+    @@ portable
     = "%identity"
 end
 
@@ -183,11 +209,13 @@ struct
   external inject
     :  ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t
     -> ('a -> 't -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) t
+    @@ portable
     = "%identity"
 
   external project
     :  ('a -> 't -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) t
     -> ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) X.t
+    @@ portable
     = "%identity"
 end
 
