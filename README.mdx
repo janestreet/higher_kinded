@@ -54,8 +54,8 @@ module Option :
   sig
     type 'a t = 'a option
     type higher_kinded
-    val inject : 'a t -> ('a -> higher_kinded) Higher_kinded.t
-    val project : ('a -> higher_kinded) Higher_kinded.t -> 'a t
+    val inject : 'a t -> ('a -> higher_kinded) Higher_kinded.t @@ portable
+    val project : ('a -> higher_kinded) Higher_kinded.t -> 'a t @@ portable
   end
 ```
 
@@ -133,8 +133,10 @@ module Result :
   sig
     type ('a, 'e) t = ('a, 'e) result
     type higher_kinded
-    val inject : ('a, 'z) t -> ('a -> 'z -> higher_kinded) Higher_kinded.t
+    val inject : ('a, 'z) t -> ('a -> 'z -> higher_kinded) Higher_kinded.t @@
+      portable
     val project : ('a -> 'z -> higher_kinded) Higher_kinded.t -> ('a, 'z) t
+      @@ portable
   end
 ```
 
