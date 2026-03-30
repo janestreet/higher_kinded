@@ -1,7 +1,11 @@
 open Base
 open Higher_kinded_intf
 
-type 'a t
+(* It is safe to mark this type as injective because:
+   1. It is abstract (has no definition), and
+   2. The [inject]/[project] functions use [%identity] for runtime conversion, which
+      doesn't create type-level aliases that could violate injectivity. *)
+type !'a t
 
 (*$ Higher_kinded_cinaps.print_type_aliases ~include_comments:false *)
 
