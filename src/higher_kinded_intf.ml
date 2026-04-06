@@ -125,7 +125,7 @@ module type Higher_kinded = sig
   (** {2 Types} *)
 
   (** If [A] implements the signature [S], [(a, A.witness1) t] is equivalent to [a A.t]. *)
-  type 'a t
+  type !'a t
 
   (*$ Higher_kinded_cinaps.print_type_aliases ~include_comments:true *)
 
