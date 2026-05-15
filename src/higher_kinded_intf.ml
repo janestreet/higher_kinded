@@ -8,89 +8,124 @@ module Higher_kinded_module_types (Higher_kinded : T1) = struct
     type 'a t
     type higher_kinded
 
-    val inject : 'a t -> ('a -> higher_kinded) Higher_kinded.t
-    val project : ('a -> higher_kinded) Higher_kinded.t -> 'a t
+    external inject
+      :  ('a t[@local_opt])
+      -> (('a -> higher_kinded) Higher_kinded.t[@local_opt])
+      = "%identity"
+
+    external project
+      :  (('a -> higher_kinded) Higher_kinded.t[@local_opt])
+      -> ('a t[@local_opt])
+      = "%identity"
   end
 
   module type S2 = sig
     type ('a, 'z) t
     type higher_kinded
 
-    val inject : ('a, 'z) t -> ('a -> 'z -> higher_kinded) Higher_kinded.t
-    val project : ('a -> 'z -> higher_kinded) Higher_kinded.t -> ('a, 'z) t
+    external inject
+      :  (('a, 'z) t[@local_opt])
+      -> (('a -> 'z -> higher_kinded) Higher_kinded.t[@local_opt])
+      = "%identity"
+
+    external project
+      :  (('a -> 'z -> higher_kinded) Higher_kinded.t[@local_opt])
+      -> (('a, 'z) t[@local_opt])
+      = "%identity"
   end
 
   module type S3 = sig
     type ('a, 'y, 'z) t
     type higher_kinded
 
-    val inject : ('a, 'y, 'z) t -> ('a -> 'y -> 'z -> higher_kinded) Higher_kinded.t
-    val project : ('a -> 'y -> 'z -> higher_kinded) Higher_kinded.t -> ('a, 'y, 'z) t
+    external inject
+      :  (('a, 'y, 'z) t[@local_opt])
+      -> (('a -> 'y -> 'z -> higher_kinded) Higher_kinded.t[@local_opt])
+      = "%identity"
+
+    external project
+      :  (('a -> 'y -> 'z -> higher_kinded) Higher_kinded.t[@local_opt])
+      -> (('a, 'y, 'z) t[@local_opt])
+      = "%identity"
   end
 
   module type S4 = sig
     type ('a, 'x, 'y, 'z) t
     type higher_kinded
 
-    val inject
-      :  ('a, 'x, 'y, 'z) t
-      -> ('a -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
+    external inject
+      :  (('a, 'x, 'y, 'z) t[@local_opt])
+      -> (('a -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t[@local_opt])
+      = "%identity"
 
-    val project
-      :  ('a -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
-      -> ('a, 'x, 'y, 'z) t
+    external project
+      :  (('a -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t[@local_opt])
+      -> (('a, 'x, 'y, 'z) t[@local_opt])
+      = "%identity"
   end
 
   module type S5 = sig
     type ('a, 'w, 'x, 'y, 'z) t
     type higher_kinded
 
-    val inject
-      :  ('a, 'w, 'x, 'y, 'z) t
-      -> ('a -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
+    external inject
+      :  (('a, 'w, 'x, 'y, 'z) t[@local_opt])
+      -> (('a -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t[@local_opt])
+      = "%identity"
 
-    val project
-      :  ('a -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
-      -> ('a, 'w, 'x, 'y, 'z) t
+    external project
+      :  (('a -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t[@local_opt])
+      -> (('a, 'w, 'x, 'y, 'z) t[@local_opt])
+      = "%identity"
   end
 
   module type S6 = sig
     type ('a, 'v, 'w, 'x, 'y, 'z) t
     type higher_kinded
 
-    val inject
-      :  ('a, 'v, 'w, 'x, 'y, 'z) t
-      -> ('a -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
+    external inject
+      :  (('a, 'v, 'w, 'x, 'y, 'z) t[@local_opt])
+      -> (('a -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t[@local_opt])
+      = "%identity"
 
-    val project
-      :  ('a -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
-      -> ('a, 'v, 'w, 'x, 'y, 'z) t
+    external project
+      :  (('a -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t[@local_opt])
+      -> (('a, 'v, 'w, 'x, 'y, 'z) t[@local_opt])
+      = "%identity"
   end
 
   module type S7 = sig
     type ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
     type higher_kinded
 
-    val inject
-      :  ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
-      -> ('a -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
+    external inject
+      :  (('a, 'u, 'v, 'w, 'x, 'y, 'z) t[@local_opt])
+      -> (('a -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
+         [@local_opt])
+      = "%identity"
 
-    val project
-      :  ('a -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
-      -> ('a, 'u, 'v, 'w, 'x, 'y, 'z) t
+    external project
+      :  (('a -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
+         [@local_opt])
+      -> (('a, 'u, 'v, 'w, 'x, 'y, 'z) t[@local_opt])
+      = "%identity"
   end
 
   module type S8 = sig
     type ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
     type higher_kinded
 
-    val inject
-      :  ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
-      -> ('a -> 't -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
+    external inject
+      :  (('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t[@local_opt])
+      -> (('a -> 't -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
+         [@local_opt])
+      = "%identity"
 
-    val project
-      :  ('a -> 't -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
-      -> ('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t
+    external project
+      :  (('a -> 't -> 'u -> 'v -> 'w -> 'x -> 'y -> 'z -> higher_kinded) Higher_kinded.t
+         [@local_opt])
+      -> (('a, 't, 'u, 'v, 'w, 'x, 'y, 'z) t[@local_opt])
+      = "%identity"
   end
   (*$*)
 

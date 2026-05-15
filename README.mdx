@@ -54,8 +54,13 @@ module Option :
   sig
     type 'a t = 'a option
     type higher_kinded
-    val inject : 'a t -> ('a -> higher_kinded) Higher_kinded.t @@ portable
-    val project : ('a -> higher_kinded) Higher_kinded.t -> 'a t @@ portable
+    external inject :
+      ('a t [@local_opt]) ->
+      (('a -> higher_kinded) Higher_kinded.t [@local_opt]) @@ portable
+      = "%identity"
+    external project :
+      (('a -> higher_kinded) Higher_kinded.t [@local_opt]) ->
+      ('a t [@local_opt]) @@ portable = "%identity"
   end
 ```
 
@@ -133,10 +138,13 @@ module Result :
   sig
     type ('a, 'e) t = ('a, 'e) result
     type higher_kinded
-    val inject : ('a, 'z) t -> ('a -> 'z -> higher_kinded) Higher_kinded.t @@
-      portable
-    val project : ('a -> 'z -> higher_kinded) Higher_kinded.t -> ('a, 'z) t
-      @@ portable
+    external inject :
+      (('a, 'z) t [@local_opt]) ->
+      (('a -> 'z -> higher_kinded) Higher_kinded.t [@local_opt]) @@ portable
+      = "%identity"
+    external project :
+      (('a -> 'z -> higher_kinded) Higher_kinded.t [@local_opt]) ->
+      (('a, 'z) t [@local_opt]) @@ portable = "%identity"
   end
 ```
 
