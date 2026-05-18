@@ -19,8 +19,8 @@ let print_module_type_s () =
 module type S%{nth} = sig @@ portable
   type %{type_ "t"}
   type higher_kinded
-  val inject : %{type_ "t"} -> %{witness "Higher_kinded.t" (tyvars n)}
-  val project : %{witness "Higher_kinded.t" (tyvars n)} -> %{type_ "t"}
+  external inject : (%{type_ "t"}[@local_opt]) -> (%{witness "Higher_kinded.t" (tyvars n)}[@local_opt]) = "%identity"
+  external project : (%{witness "Higher_kinded.t" (tyvars n)}[@local_opt]) -> (%{type_ "t"}[@local_opt]) = "%identity"
 end
 |}])
 ;;
@@ -91,8 +91,8 @@ module Make%{nth} (X : %{module_type_T n})
   : S%{nth} with type %{type_ "t"} := %{type_ "X.t"}
   = struct
     type higher_kinded
-    external inject : %{type_ "X.t"} -> %{witness "t" (tyvars n) } @@ portable = "%identity"
-    external project : %{witness "t" (tyvars n)} -> %{type_ "X.t"} @@ portable = "%identity"
+    external inject : (%{type_ "X.t"}[@local_opt]) -> (%{witness "t" (tyvars n) }[@local_opt]) @@ portable = "%identity"
+    external project : (%{witness "t" (tyvars n)}[@local_opt]) -> (%{type_ "X.t"}[@local_opt]) @@ portable = "%identity"
   end
 |}]);
   let type_ name n = Core_type.constr_n name n |> Core_type.to_string in
