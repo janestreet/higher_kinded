@@ -56,7 +56,7 @@ module%test [@name "tests"] _ = struct
         ; g : 'g
         ; h : 'h
         }
-  [@@deriving compare, quickcheck, sexp_of]
+  [@@deriving compare ~localize, quickcheck, sexp_of]
 
   module type S = sig
     type injected
@@ -76,7 +76,9 @@ module%test [@name "tests"] _ = struct
         let projected = M.project injected in
         assert (phys_same injected projected);
         assert (
-          [%compare.equal: (int, int, int, int, int, int, int, int) t] orig projected))
+          ([%compare.equal: (int, int, int, int, int, int, int, int) t] [@mode local])
+            orig
+            projected))
   ;;
 
   module T1 = struct
